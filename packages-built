@@ -43,4 +43,8 @@ fi
 #echo operator: $operator
 #echo timestamp: $timestamp
 
-cd /var/db/pkg && for i in */*; do [ $(cat ${i}/BUILD_TIME) ${operator} ${timestamp} ] && echo ${i} | sed -e 's/^/=/'; done
+pushd /var/db/pkg > /dev/null || ( echo "Uh oh, can't read VDB" && exit )
+for i in */*; do
+	[ $(cat ${i}/BUILD_TIME) ${operator} ${timestamp} ] && echo ${i} | sed -e 's/^/=/'
+done
+popd >/dev/null
