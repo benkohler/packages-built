@@ -1,0 +1,11 @@
+Usage:
+  ./packages-built <after|before> <packagename>
+    or
+  ./packages-built <after|before> <epochtime>
+
+Examples:
+  ./packages-built after glibc
+  ./packages-built before gcc-6
+  ./packages-built before 1512655201
+
+Note: package specifications rely on qlist -I matching
