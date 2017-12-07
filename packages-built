@@ -33,6 +33,8 @@ if [[ "$2" =~ ^[0-9]+$ ]]; then
 	timestamp=${2}
 elif qlist -ICve ${2} &>/dev/null; then
 	timestamp=$(cat /var/db/pkg/$(qlist -ICve ${2} | head -n1)/BUILD_TIME)
+elif qlist -ICv ${2} &>/dev/null; then
+	timestamp=$(cat /var/db/pkg/$(qlist -ICv ${2} | head -n1)/BUILD_TIME)
 else
 	echo "Don't know what to do with arg2"
 	echo ""
