@@ -1,0 +1,46 @@
+#!/bin/bash
+usage() {
+	echo "Usage:"
+	echo "  ./packages-built <after|before> <packagename>"
+	echo "    or"
+	echo "  ./packages-built <after|before> <epochtime>"
+	echo ""
+	echo "Examples:"
+	echo "  ./packages-built after glibc"
+	echo "  ./packages-built before 1512655201"
+	exit
+}
+
+if ! [[ $# == 2 ]]; then
+	usage
+fi
+
+
+#parse $1
+if [ ${1} == "after" ]; then
+	operator="-gt"
+elif [ ${1} == "before" ]; then
+	operator="-lt"
+else
+	echo "arg1 must be 'before' or 'after'"
+	echo ""
+	usage
+	exit
+fi
+
+#parse $2
+if [[ "$2" =~ ^[0-9]+$ ]]; then
+	timestamp=${2}
+elif qlist -ICve ${2} &>/dev/null; then
+	timestamp=$(cat /var/db/pkg/$(qlist -ICve ${2} | head -n1)/BUILD_TIME)
+else
+	echo "Don't know what to do with arg2"
+	echo ""
+	usage
+	exit
+fi
+
+#echo operator: $operator
+#echo timestamp: $timestamp
+
+cd /var/db/pkg && for i in */*; do [ $(cat ${i}/BUILD_TIME) ${operator} ${timestamp} ] && echo ${i} | sed -e 's/^/=/'; done
