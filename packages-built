@@ -1,13 +1,16 @@
 #!/bin/bash
 usage() {
 	echo "Usage:"
-	echo "  ./packages-built <after|before> <packagename>"
+	echo "  ${0} <after|before> <packagename>"
 	echo "    or"
-	echo "  ./packages-built <after|before> <epochtime>"
+	echo "  ${0} <after|before> <epochtime>"
 	echo ""
 	echo "Examples:"
-	echo "  ./packages-built after glibc"
-	echo "  ./packages-built before 1512655201"
+	echo "  ${0} after glibc"
+	echo "  ${0} before gcc-6"
+	echo "  ${0} before 1512655201"
+	echo ""
+	echo "Note: package specifications rely on qlist -I matching"
 	exit
 }
 
