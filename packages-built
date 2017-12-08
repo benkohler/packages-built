@@ -34,10 +34,13 @@ fi
 #parse $2
 if [[ "$2" =~ ^[0-9]+$ ]]; then
 	timestamp=${2}
+	timespec="${2} epoch"
 elif qlist -ICve ${2} &>/dev/null; then
 	timestamp=$(cat /var/db/pkg/$(qlist -ICve ${2} | head -n1)/BUILD_TIME)
+	timespec="$(qlist -ICve ${2} | head -n1)"
 elif qlist -ICv ${2} &>/dev/null; then
 	timestamp=$(cat /var/db/pkg/$(qlist -ICv ${2} | head -n1)/BUILD_TIME)
+	timespec="$(qlist -ICv ${2} | head -n1)"
 else
 	echo "Don't know what to do with arg2"
 	echo ""
@@ -53,3 +56,5 @@ for i in */*; do
 	[ $(cat ${i}/BUILD_TIME) ${operator} ${timestamp} ] && echo ${i} | sed -e 's/^/=/'
 done
 popd >/dev/null
+
+echo "Listed packages built ${1} ${timespec} ($(date --date=@${timestamp}))" >&2
