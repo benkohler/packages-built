@@ -52,7 +52,7 @@ fi
 #echo timestamp: $timestamp
 
 pushd /var/db/pkg > /dev/null || ( echo "Uh oh, can't read VDB" && exit )
-for i in */*; do
+for i in $(ls -d */* | grep -v MERGING); do
 	[ $(cat ${i}/BUILD_TIME) ${operator} ${timestamp} ] && echo ${i} | sed -e 's/^/=/'
 done
 popd >/dev/null
